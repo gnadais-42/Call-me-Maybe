@@ -1,12 +1,38 @@
-from src.state_machine import StateMachine
+from llm_sdk import Small_LLM_Model
+from src.parser import load_function_definitions
+from src.state_machine import DecoderState, StateMachine
+from src.trie import TokenTrie
 
 
-machine = StateMachine()
+model = Small_LLM_Model()
 
-print(machine.context.state)
+functions = load_function_definitions(
+    "data/input/functions_definition.json"
+)
 
-machine.transition()
-print(machine.context.state)
+trie = TokenTrie()
 
-machine.transition()
-print(machine.context.state)
+for function in functions:
+    tokens = model.encode(function.name)[0].tolist()
+    trie.insert(tokens)
+
+machine = StateMachine(
+    model,
+    trie,
+    functions
+)
+
+generated = []
+
+while True:
+    machine.update_state(generated)
+
+    allowed = machine.get_allowed_tokens(generated)
+
+    if not allowed:
+        break
+
+    generated.append(allowed[0])
+
+print(model.decode(generated))
+print(machine.context.selected_function)

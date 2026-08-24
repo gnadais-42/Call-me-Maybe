@@ -3,7 +3,7 @@ from llm_sdk import Small_LLM_Model
 
 model = Small_LLM_Model()
 
-text = '{\n    "name": "'
+text = '",\n   "parameters": {\n'
 
 tokens = model.encode(text)[0].tolist()
 
