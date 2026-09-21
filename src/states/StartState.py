@@ -2,8 +2,16 @@ from .State import State
 from .FunctionNameState import FunctionNameState
 from ..context import DecoderContext
 
+
 class StartState(State):
-    def __init__(self, context: DecoderContext):
+    """Forces the fixed opening of the JSON object: `{\\n  "name": "`.
+
+    This text never varies, so there is nothing for the model to choose
+    here: at every position, exactly one token id (the next token of the
+    pre-encoded prefix) is allowed.
+    """
+
+    def __init__(self, context: DecoderContext) -> None:
         self.context = context
         self.prefix: list[int] = context.model.encode('{\n  "name": "')[0].tolist()
 

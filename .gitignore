@@ -1,2 +1,37 @@
+# Python bytecode / caches
 __pycache__/
+*.py[cod]
+*$py.class
+
+# Type checker / test / lint caches
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+.flake8_cache/
+
+# Virtual environments
 .venv/
+venv/
+env/
+
+# uv
+# (uv.lock is intentionally NOT ignored -- it's required by the subject
+# for reproducible installs via `uv sync`.)
+.uv/
+
+# Packaging / build artifacts
+*.egg-info/
+build/
+dist/
+
+# Editor/OS cruft
+.vscode/
+.idea/
+.DS_Store
+
+# Project-specific: generated at runtime, must not be committed per the
+# subject ("Do not include the output/ directory in your repository").
+data/
+
+# Provided by the school separately; copied in locally, not committed.
+llm_sdk/

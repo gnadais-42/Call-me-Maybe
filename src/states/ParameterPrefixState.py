@@ -4,6 +4,13 @@ from ..context import DecoderContext
 
 
 class ParameterPrefixState(State):
+    """Forces the fixed text `    "` before a parameter's name.
+
+    Only reached for the *first* parameter of an object; subsequent
+    parameters are introduced by ParameterEndState forcing `,\\n    "`
+    directly, to avoid duplicating this same fixed text in two places.
+    """
+
     def __init__(self, context: DecoderContext, start_position: int) -> None:
         self.context = context
         self.start_position = start_position

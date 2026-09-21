@@ -1,13 +1,38 @@
 [project]
 name = "call-me-maybe"
-version = "1.0.0"
-description = "Introduction to function calling in LLMs"
+version = "1.5.0"
+description = "Constrained-decoding function calling for a small LLM (42 project)."
 requires-python = ">=3.10"
 dependencies = [
-    "numpy>=2.2.6",
-    "pydantic>=2.12.5",
-    "llm-sdk>=1.0.1",
+    "pydantic>=2.0",
+    "numpy>=1.26",
+    "llm_sdk",
 ]
 
 [tool.uv.sources]
-llm-sdk = { path = "./llm_sdk", editable = true }
+# llm_sdk is provided by the school, not published to PyPI. Copy the
+# llm_sdk/ folder into the project root (next to src/), as instructed in
+# the subject, and uv will pick it up as a local path dependency.
+llm_sdk = { path = "./llm_sdk" }
+
+[dependency-groups]
+dev = [
+    "flake8>=7.0",
+    "mypy>=1.8",
+    "pytest>=8.0",
+]
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_ignores = true
+ignore_missing_imports = true
+disallow_untyped_defs = true
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+# llm_sdk ships without type stubs; this keeps `make lint-strict`
+# (mypy --strict) from failing purely on that, independently of the
+# ignore_missing_imports default above.
+module = "llm_sdk.*"
+ignore_missing_imports = true

@@ -5,10 +5,19 @@ from ..trie import TokenTrie
 
 
 class ParameterNameState(State):
+    """Constrains generation to one of the function's remaining parameters.
+
+    The trie is built fresh in __init__ from
+    context.get_parameter_trie(), which already excludes any parameter
+    name in context.generated_parameters -- this is what prevents the same
+    parameter from being generated twice across a loop back from
+    ParameterEndState.
+    """
+
     def __init__(self, context: DecoderContext, start_position: int) -> None:
         self.context = context
         self.start_position = start_position
-        self.parameter_trie: TokenTrie = (context.get_parameter_trie())
+        self.parameter_trie: TokenTrie = context.get_parameter_trie()
 
     def get_allowed_tokens(self, generated_tokens: list[int]) -> list[int]:
         parameter_tokens = generated_tokens[self.start_position:]
